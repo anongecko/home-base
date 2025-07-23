@@ -1,0 +1,157 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+  * {
+    @apply antialiased;
+  }
+  
+  /* CSS custom properties for dynamic theming */
+  :root {
+    --primary-color: #ff0080;
+    --secondary-color: #00ff88;
+    --accent-color: #00ffff;
+  }
+  
+  body {
+    @apply bg-black text-white overflow-hidden;
+    /* GPU acceleration for smooth animations */
+    transform: translateZ(0);
+    will-change: opacity;
+  }
+  
+  /* Optimize font rendering */
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl;
+    /* GPU acceleration */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  
+  .glass-button {
+    @apply backdrop-blur-md bg-white/10 hover:bg-white/20 border border-white/20 
+           rounded-lg transition-all duration-300 hover:shadow-lg;
+    transform: translateZ(0);
+    will-change: transform, background-color;
+  }
+  
+  .gradient-border-animation {
+    background: linear-gradient(45deg, 
+      var(--primary-color, #ff0080), 
+      var(--secondary-color, #00ff88),
+      var(--accent-color, #00ffff),
+      var(--primary-color, #ff0080));
+    background-size: 300% 300%;
+    animation: gradient-border 3s ease infinite;
+  }
+  
+  @keyframes gradient-border {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  .bookmark-3d {
+    transform-style: preserve-3d;
+    transform: perspective(1000px) rotateX(10deg);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+  
+  .bookmark-3d:hover {
+    transform: perspective(1000px) rotateX(0deg) translateY(-5px);
+  }
+  
+  /* Micro-animations */
+  .hover-lift {
+    @apply transition-transform duration-200;
+  }
+  
+  .hover-lift:hover {
+    @apply -translate-y-1;
+  }
+  
+  .hover-glow {
+    @apply relative overflow-hidden;
+  }
+  
+  .hover-glow::before {
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    content: '';
+    background: radial-gradient(circle at center, rgba(255,255,255,0.1), transparent 70%);
+  }
+  
+  .hover-glow:hover::before {
+    @apply opacity-100;
+  }
+}
+
+/* Performance optimizations */
+@layer utilities {
+  .gpu-accelerated {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    perspective: 1000;
+    -webkit-perspective: 1000;
+    will-change: transform;
+  }
+  
+  .no-blur {
+    -webkit-font-smoothing: subpixel-antialiased;
+    transform: translateZ(0);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-white/20 rounded-full;
+  @apply transition-colors duration-200;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-white/30;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* CSS containment for performance */
+.contain-paint {
+  contain: paint;
+}
+
+.contain-layout {
+  contain: layout;
+}
+
+.contain-strict {
+  contain: strict;
+}
